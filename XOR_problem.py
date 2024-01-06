@@ -4,9 +4,9 @@ import sys
 sys.path.append("lib\architect")
 
 
-from lib.architect.Neural_Network import Network
-from lib.architect.dense import *
-from lib.architect.activation_functions import *
+from Neural_Network import Network
+from dense import *
+from activation_functions import *
 import numpy as np
 
 
@@ -23,17 +23,20 @@ network = [
 epochs = 20000
 learning_rate = 0.1
 
+#trains the neural network
+print("Training")
 brain = Network(network)
 brain.train(epochs,learning_rate,X,Y, False)
 
 
+#allows for testing the network on the xor problem
 while(True):
     x = [[int(input("First value: "))]]
     x.append([int(input("Second value: "))])
     X = np.reshape(x,(1,2,1))
     
-
-    guess = brain.test(X[0],True)
+    #tests the network on the input, will display the output value if True
+    guess = brain.test(X[0],False)
 
     if(guess > 0.5):
         print("True")
