@@ -50,7 +50,12 @@ class Network():
     def error(self,y,output):
         if(self.loss_function == "mse"):
             return mse(y,output)
+        if(self.loss_function == "bce"):
+            return binary_cross_entropy(y,output)
 
     def error_prime(self,y,output):
         if(self.loss_function == "mse"):
             return mse_prime(y,output)
+
+        if(self.loss_function == "bce"):
+            return binary_cross_entropy_prime(y, output)
