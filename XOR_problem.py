@@ -7,6 +7,7 @@ sys.path.append("lib\architect")
 from Neural_Network import Network
 from dense import *
 from activation_functions import *
+from loss_functions import *
 import numpy as np
 
 
@@ -23,9 +24,9 @@ network = [
 epochs = 20000
 learning_rate = 0.1
 
-#trains the neural network
+#trains the neural network use mean squared error loss function
 print("Training")
-brain = Network(network)
+brain = Network(network, "mse")
 brain.train(epochs,learning_rate,X,Y, False)
 
 

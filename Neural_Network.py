@@ -6,8 +6,10 @@ from loss_functions import *
 import numpy as np
 
 class Network():
-    def __init__(self, network):
+    #loss functions supported: MSE
+    def __init__(self, network, loss_function):
         self.network = network
+        self.loss_function = loss_function
         
 
     def train(self, epochs, learning_rate, X, Y, show_output=True):
@@ -21,10 +23,10 @@ class Network():
                 output = self.test(x)
 
                 #error calculation
-                error += mse(y,output)
+                error += self.error(y,output)
 
                 #backward
-                grad = mse_prime(y,output)
+                grad = self.error_prime(y,output)
                 for layer in reversed(self.network):
                     grad = layer.backward(grad,learning_rate)
 
@@ -43,3 +45,12 @@ class Network():
             print(output)
 
         return output
+
+
+    def error(self,y,output):
+        if(self.loss_function == "mse"):
+            return mse(y,output)
+
+    def error_prime(self,y,output):
+        if(self.loss_function == "mse"):
+            return mse_prime(y,output)
