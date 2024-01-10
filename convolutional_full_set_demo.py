@@ -1,4 +1,4 @@
-#MNIST binary solver (only the 1s and 0s in the data set)
+#MNIST data set solver
 import numpy as np
 from keras.datasets import mnist
 from keras.utils import to_categorical
@@ -12,14 +12,15 @@ from loss_functions import *
 def preprocess_data(x,y,limit):
     z_index = np.where(y == 0)[0][:limit]
     one_index = np.where(y == 1)[0][:limit]
-    all_indices = np.hstack((z_index, one_index))
+    two_index = np.where(y == 2)[0][:limit]
+    all_indices = np.hstack((z_index, one_index, two_index))
     all_indices = np.random.permutation(all_indices)
-    x, y = x[all_indices], y[all_indices]
+    #x, y = x[:], y[:]
     x = x.reshape(len(x), 1, 28, 28)
     #normalizes the input
     x = x.astype("float32")/255
     y = to_categorical(y)
-    y = y.reshape(len(y), 2, 1)
+    y = y.reshape(len(y), 10, 1)
     return x, y
 
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -33,7 +34,7 @@ network = [
     Reshape((5,26,26), (5 * 26 * 26, 1)),
     Dense(5 * 26 * 26, 100),
     Sigmoid(),
-    Dense(100, 2),
+    Dense(100, 10),
     Sigmoid()
     ]
 
@@ -45,6 +46,7 @@ print("Training")
 brain = Network(network, "bce")
 brain.train(epochs, learning_rate, x_train, y_train, False)
 
+print("Testing")
 for i in range(len(x_test)):
     output = brain.test(x_test[i]) 
     index = output.argmax(0)
